@@ -1,0 +1,39 @@
+{
+  "name": "careerai-kenya",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "axios": "^1.6.5",
+    "chart.js": "^4.5.1",
+    "lucide-react": "^0.575.0",
+    "next": "^14.1.0",
+    "openai": "^4.24.0",
+    "pdfkit": "^0.14.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^18.2.0",
+    "resend": "^3.2.0",
+    "uuid": "^9.0.0",
+    "zod": "^3.22.4"
+  },
+  "optionalDependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "@types/uuid": "^9.0.7",
+    "autoprefixer": "^10.4.17",
+    "typescript": "^5.3.3"
+  }
+}

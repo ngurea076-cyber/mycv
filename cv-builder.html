@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CV Builder — CareerAI Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green: #00a844;
+      --green-light: #e6f7ed;
+      --green-mid: #b2dfcc;
+      --green-bright: #00c853;
+      --green-glow: rgba(0,168,68,0.1);
+      --bg: #f7faf8;
+      --bg2: #ffffff;
+      --bg3: #f0f5f2;
+      --border: #e2ebe5;
+      --border2: #d0ddd5;
+      --text: #0f1f14;
+      --text2: #2d4535;
+      --muted: #637a6c;
+      --muted2: #96a89d;
+      --red: #e53935;
+      --sidebar-w: 260px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════
+       TOP BAR
+    ══════════════════════════ */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 20px; }
+    .topbar-logo { font-weight: 800; font-size: 1.05rem; color: var(--text); text-decoration: none; }
+    .topbar-logo span { color: var(--green); }
+    .topbar-divider { width: 1px; height: 20px; background: var(--border); }
+    .topbar-title { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+    .topbar-template-badge {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--green-light); border: 1px solid var(--green-mid);
+      color: var(--green); font-size: 0.75rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 100px;
+    }
+    .topbar-right { display: flex; gap: 10px; align-items: center; }
+    .btn-ghost {
+      background: transparent; border: 1.5px solid var(--border2);
+      color: var(--muted); padding: 8px 18px; border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-ghost:hover { border-color: var(--border); color: var(--text); }
+    .btn-green {
+      background: var(--green); color: #fff;
+      padding: 9px 20px; border-radius: 8px; border: none;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.82rem;
+      cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-green:hover { background: #009940; transform: translateY(-1px); }
+    .btn-green:disabled { background: var(--muted2); cursor: not-allowed; transform: none; }
+
+    /* ══════════════════════════
+       LAYOUT
+    ══════════════════════════ */
+    .builder-wrap {
+      display: flex;
+      padding-top: 60px;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════
+       SIDEBAR STEPS
+    ══════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: #fff; border-right: 1px solid var(--border);
+      position: fixed; top: 60px; bottom: 0; left: 0;
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+      z-index: 100;
+    }
+    .sidebar-inner { padding: 28px 0; flex: 1; }
+    .sidebar-section-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted2);
+      padding: 0 24px; margin-bottom: 12px;
+    }
+    .step-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 24px; cursor: pointer;
+      transition: background 0.2s; position: relative;
+    }
+    .step-item:hover { background: var(--bg3); }
+    .step-item.active { background: var(--green-light); }
+    .step-item.active .step-dot { background: var(--green); border-color: var(--green); color: #fff; }
+    .step-item.active .step-name { color: var(--green); font-weight: 700; }
+    .step-item.done .step-dot {
+      background: var(--green); border-color: var(--green); color: #fff;
+      font-size: 0;
+    }
+    .step-item.done .step-dot::after { content: '✓'; font-size: 0.7rem; font-weight: 900; }
+    .step-dot {
+      width: 30px; height: 30px; flex-shrink: 0;
+      border-radius: 50%; border: 2px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: var(--muted);
+      transition: all 0.3s; background: var(--bg3);
+    }
+    .step-info { flex: 1; }
+    .step-name { font-size: 0.83rem; font-weight: 600; color: var(--muted); transition: color 0.2s; }
+    .step-sub { font-size: 0.71rem; color: var(--muted2); margin-top: 1px; }
+    .step-connector {
+      width: 2px; height: 14px; background: var(--border);
+      margin: 0 0 0 38px;
+    }
+    .sidebar-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .progress-bar-wrap { margin-bottom: 8px; }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.72rem; color: var(--muted); margin-bottom: 6px;
+    }
+    .progress-track {
+      height: 5px; background: var(--bg3); border-radius: 100px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--green); border-radius: 100px;
+      transition: width 0.4s ease;
+    }
+    .sidebar-save-note { font-size: 0.72rem; color: var(--muted2); margin-top: 8px; }
+
+    /* ══════════════════════════
+       MAIN CONTENT
+    ══════════════════════════ */
+    .builder-main {
+      margin-left: var(--sidebar-w);
+      flex: 1; display: flex; flex-direction: column;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* Step panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .step-content {
+      max-width: 780px; padding: 44px 48px 120px;
+    }
+    .step-header { margin-bottom: 36px; }
+    .step-header-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 8px;
+    }
+    .step-header h2 {
+      font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+    .step-header p { color: var(--muted); font-size: 0.88rem; font-weight: 300; }
+
+    /* Form elements */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
+    .form-field { display: flex; flex-direction: column; gap: 7px; }
+    .form-field.span2 { grid-column: span 2; }
+    label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+    }
+    .req::after { content: ' *'; color: var(--green); }
+    input[type=text], input[type=email], input[type=tel], select, textarea {
+      background: #fff; border: 1.5px solid var(--border);
+      color: var(--text); padding: 11px 14px; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px var(--green-glow);
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted2); }
+    textarea { resize: vertical; min-height: 96px; }
+    select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23637a6c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; }
+
+    /* Skills tags */
+    .skills-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 10px 12px; background: #fff;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      min-height: 52px; cursor: text; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .skills-tags:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-glow); }
+    .skill-tag {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--green-light); border: 1px solid var(--green-mid);
+      color: var(--green); padding: 4px 10px; border-radius: 6px;
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .skill-tag button {
+      background: none; border: none; cursor: pointer;
+      color: var(--green); font-size: 0.9rem; padding: 0; line-height: 1;
+      opacity: 0.7; transition: opacity 0.15s;
+    }
+    .skill-tag button:hover { opacity: 1; }
+    .skills-tags input {
+      border: none; background: transparent;
+      padding: 4px; font-size: 0.85rem; min-width: 100px; flex: 1;
+      box-shadow: none !important; border-radius: 0;
+    }
+
+    /* Entry cards */
+    .entry-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 24px; margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .entry-card:hover { border-color: var(--border2); }
+    .entry-card-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .entry-card-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--green-light); border: 1px solid var(--green-mid);
+      color: var(--green); font-size: 0.72rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-right: 10px; flex-shrink: 0;
+    }
+    .entry-card-title { font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; }
+    .entry-card-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; margin-left: 36px; }
+    .btn-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted2); font-size: 1rem; padding: 4px;
+      transition: color 0.2s; border-radius: 5px;
+    }
+    .btn-remove:hover { color: var(--red); background: #ffeaea; }
+    .btn-add-entry {
+      width: 100%; background: #fff; border: 1.5px dashed var(--border2);
+      color: var(--muted); padding: 13px; border-radius: 12px;
+      font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-add-entry:hover {
+      border-color: var(--green); color: var(--green);
+      background: var(--green-light);
+    }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+    /* AI bar */
+    .ai-bar {
+      background: linear-gradient(135deg, var(--green-light), #f0fdf4);
+      border: 1.5px solid var(--green-mid);
+      border-radius: 16px; padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      margin-top: 32px;
+    }
+    .ai-bar-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 2px; }
+    .ai-bar-sub { font-size: 0.78rem; color: var(--muted); }
+    .btn-ai {
+      background: var(--green); color: #fff;
+      padding: 12px 24px; border-radius: 10px; border: none;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.88rem;
+      cursor: pointer; white-space: nowrap; transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 14px rgba(0,168,68,0.25);
+    }
+    .btn-ai:hover { background: #009940; transform: translateY(-1px); }
+    .spin {
+      display: none; width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Step nav bottom */
+    .step-nav {
+      position: fixed; bottom: 0;
+      left: var(--sidebar-w); right: 0; z-index: 50;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 16px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .step-nav-left { display: flex; align-items: center; gap: 10px; }
+    .step-nav-right { display: flex; align-items: center; gap: 10px; }
+    .step-indicator {
+      font-size: 0.78rem; font-weight: 600; color: var(--muted);
+    }
+    .step-indicator span { color: var(--text); }
+
+    /* ══════════════════════════
+       PREVIEW MODAL
+    ══════════════════════════ */
+    .preview-modal {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,25,15,0.7);
+      backdrop-filter: blur(6px);
+      animation: fadeIn 0.2s ease;
+    }
+    .preview-modal.open { display: flex; }
+    @keyframes fadeIn { from{opacity:0}to{opacity:1} }
+    .preview-modal-inner {
+      display: flex; width: 100%; height: 100%;
+    }
+    .preview-left {
+      flex: 1; overflow-y: auto;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 32px;
+      background: #1a2a1e;
+    }
+    .preview-right-panel {
+      width: 340px; flex-shrink: 0;
+      background: #fff; border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+    }
+    .preview-right-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .preview-right-header h3 { font-size: 0.95rem; font-weight: 800; }
+    .btn-close-preview {
+      background: var(--bg3); border: none; width: 32px; height: 32px;
+      border-radius: 8px; cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-close-preview:hover { background: #e0e0e0; }
+
+    /* CV paper */
+    .cv-paper {
+      background: #fff; color: #111;
+      width: 100%; max-width: 640px;
+      border-radius: 4px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+    .cv-header-block {
+      padding: 32px 36px; color: #f0faf2;
+    }
+    .cv-name {
+      font-weight: 800; font-size: 1.6rem; letter-spacing: -0.025em; margin-bottom: 4px;
+    }
+    .cv-role { font-size: 0.88rem; font-weight: 500; margin-bottom: 14px; }
+    .cv-contacts {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      font-size: 0.72rem; opacity: 0.75;
+    }
+    .cv-body { padding: 28px 36px; display: grid; grid-template-columns: 2fr 1fr; gap: 28px; }
+    .cv-section { margin-bottom: 22px; }
+    .cv-section-title {
+      font-weight: 800; font-size: 0.65rem; letter-spacing: 0.1em;
+      text-transform: uppercase; border-bottom: 2px solid #e8f5e9;
+      padding-bottom: 5px; margin-bottom: 12px;
+    }
+    .cv-entry { margin-bottom: 14px; }
+    .cv-entry-title { font-weight: 700; font-size: 0.82rem; color: #111; }
+    .cv-entry-sub { font-size: 0.72rem; color: #666; margin-bottom: 5px; }
+    .cv-entry ul { list-style: none; }
+    .cv-entry ul li {
+      font-size: 0.75rem; color: #333; padding-left: 12px;
+      position: relative; margin-bottom: 3px; line-height: 1.5;
+    }
+    .cv-entry ul li::before { content: '▸'; position: absolute; left: 0; font-size: 0.65rem; }
+    .cv-skill-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+    .cv-skill { font-size: 0.65rem; font-weight: 600; padding: 3px 9px; border-radius: 4px; }
+    .cv-summary { font-size: 0.78rem; color: #333; line-height: 1.7; }
+
+    /* Template themes */
+    .theme-modern .cv-header-block { background: #0d1f1a; }
+    .theme-modern .cv-section-title { color: #00a844; }
+    .theme-modern .cv-entry ul li::before { color: #00c853; }
+    .theme-modern .cv-skill { background: #e6f7ed; color: #00a844; }
+
+    .theme-classic .cv-header-block { background: #1565c0; }
+    .theme-classic .cv-section-title { color: #1565c0; }
+    .theme-classic .cv-entry ul li::before { color: #1565c0; }
+    .theme-classic .cv-skill { background: #e3f2fd; color: #1565c0; }
+
+    .theme-executive .cv-header-block { background: #1a1a2e; }
+    .theme-executive .cv-section-title { color: #e91e63; }
+    .theme-executive .cv-entry ul li::before { color: #e91e63; }
+    .theme-executive .cv-skill { background: #fce4ec; color: #e91e63; }
+
+    .theme-minimal .cv-header-block { background: #212121; }
+    .theme-minimal .cv-section-title { color: #e65100; }
+    .theme-minimal .cv-entry ul li::before { color: #f57c00; }
+    .theme-minimal .cv-skill { background: #fff3e0; color: #e65100; }
+
+    .theme-navy .cv-header-block { background: #0d2137; }
+    .theme-navy .cv-section-title { color: #0d2137; }
+    .theme-navy .cv-entry ul li::before { color: #0d2137; }
+    .theme-navy .cv-skill { background: #e8eaf6; color: #0d2137; }
+
+    .theme-sage .cv-header-block { background: #1b5e20; }
+    .theme-sage .cv-section-title { color: #2e7d32; }
+    .theme-sage .cv-entry ul li::before { color: #4caf50; }
+    .theme-sage .cv-skill { background: #e8f5e9; color: #2e7d32; }
+
+    .theme-creative .cv-header-block { background: linear-gradient(135deg,#ff6f00,#f50057); }
+    .theme-creative .cv-section-title { color: #ff6f00; }
+    .theme-creative .cv-entry ul li::before { color: #f50057; }
+    .theme-creative .cv-skill { background: #fff8e1; color: #ff6f00; }
+
+    .theme-clean .cv-header-block { background: #333; }
+    .theme-clean .cv-section-title { color: #333; }
+    .theme-clean .cv-entry ul li::before { color: #555; }
+    .theme-clean .cv-skill { background: #f5f5f5; color: #333; }
+
+    /* Preview right panel content */
+    .preview-actions { padding: 20px 24px; display: flex; flex-direction: column; gap: 10px; }
+    .preview-action-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; background: var(--bg3); border: 1.5px solid var(--border);
+      border-radius: 12px; cursor: pointer; transition: all 0.2s; width: 100%;
+      font-family: 'Poppins', sans-serif;
+    }
+    .preview-action-btn:hover { border-color: var(--green); background: var(--green-light); }
+    .preview-action-btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+    .preview-action-btn.primary:hover { background: #009940; }
+    .pa-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .pa-label { font-weight: 700; font-size: 0.83rem; }
+    .pa-sub { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .preview-action-btn.primary .pa-sub { color: rgba(255,255,255,0.7); }
+    .pa-arrow { margin-left: auto; color: var(--muted2); font-size: 0.75rem; }
+
+    .template-picker { padding: 0 24px 20px; }
+    .template-picker-title {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+    }
+    .template-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+    .tpl-thumb-mini {
+      height: 44px; border-radius: 6px; border: 2px solid var(--border);
+      cursor: pointer; transition: all 0.2s; overflow: hidden;
+    }
+    .tpl-thumb-mini:hover { border-color: var(--green); }
+    .tpl-thumb-mini.active { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-glow); }
+
+    /* ══════════════════════════
+       LOADING OVERLAY
+    ══════════════════════════ */
+    .loading-overlay {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(247,250,248,0.92);
+      backdrop-filter: blur(8px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    }
+    .loading-overlay.show { display: flex; }
+    .loading-spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--green-mid); border-top-color: var(--green);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    .loading-title { font-weight: 800; font-size: 1rem; color: var(--text); }
+    .loading-sub { font-size: 0.82rem; color: var(--muted); margin-top: -8px; }
+    .loading-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .loading-step {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem; color: var(--muted2); transition: color 0.3s;
+    }
+    .loading-step.done { color: var(--green); }
+    .loading-step.active { color: var(--text); font-weight: 600; }
+    .loading-step-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--border2); flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .loading-step.done .loading-step-dot { background: var(--green); }
+    .loading-step.active .loading-step-dot { background: var(--green); animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+
+    /* ══════════════════════════
+       SUCCESS SCREEN
+    ══════════════════════════ */
+    #panel-success {
+      max-width: none; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - 60px);
+    }
+    .success-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 24px; padding: 52px 48px;
+      max-width: 520px; width: 90%; text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.07);
+    }
+    .success-icon {
+      width: 84px; height: 84px;
+      background: var(--green-light); border: 2px solid var(--green-mid);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; margin: 0 auto 24px;
+      animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes popIn { from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1} }
+    .success-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 8px; }
+    .success-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; font-weight: 300; }
+    .receipt-box {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 20px 24px;
+      text-align: left; margin-bottom: 28px;
+    }
+    .receipt-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    }
+    .receipt-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.82rem; padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .receipt-row:last-child { border: none; }
+    .receipt-row .rk { color: var(--muted); }
+    .receipt-row .rv { font-weight: 700; }
+    .receipt-row .rv.green { color: var(--green); }
+    .download-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .btn-dl {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg3); border: 1.5px solid var(--border);
+      color: var(--text2); padding: 12px 22px; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.83rem;
+      cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .btn-dl:hover { border-color: var(--green); color: var(--green); }
+    .btn-dl.pdf { background: var(--green); color: #fff; border-color: var(--green); }
+    .btn-dl.pdf:hover { background: #009940; }
+
+    /* ══════════════════════════
+       PAYMENT PANEL
+    ══════════════════════════ */
+    #panel-payment {
+      max-width: none; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - 60px);
+    }
+    .payment-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 24px; max-width: 460px; width: 90%;
+      overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.07);
+    }
+    .payment-top {
+      padding: 32px 36px 24px; text-align: center;
+      background: linear-gradient(135deg, var(--green-light), #f0fdf4);
+      border-bottom: 1px solid var(--green-mid);
+    }
+    .mpesa-logo { font-weight: 900; font-size: 1.6rem; color: #4caf50; margin-bottom: 4px; }
+    .mpesa-tagline { font-size: 0.78rem; color: var(--muted); margin-bottom: 24px; }
+    .pay-amount { font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+    .pay-amount .ksh { font-size: 1.3rem; color: var(--green); }
+    .pay-desc { font-size: 0.82rem; color: var(--muted); }
+    .payment-body { padding: 28px 36px 36px; }
+    .pay-field label { display: block; margin-bottom: 8px; }
+    .phone-wrap {
+      display: flex; background: #fff; border: 1.5px solid var(--border);
+      border-radius: 10px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .phone-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-glow); }
+    .phone-prefix {
+      padding: 11px 14px; background: var(--bg3); color: var(--muted);
+      font-size: 0.88rem; border-right: 1px solid var(--border); white-space: nowrap;
+    }
+    .phone-wrap input { border: none; background: transparent; border-radius: 0; box-shadow: none !important; }
+    .pay-summary {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 16px 18px;
+      display: flex; flex-direction: column; gap: 8px; margin: 18px 0;
+    }
+    .pay-row { display: flex; justify-content: space-between; font-size: 0.82rem; }
+    .pay-row .pk { color: var(--muted); }
+    .pay-row .pv.green { color: var(--green); font-weight: 600; }
+    .pay-row.total { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+    .pay-row.total .pv { font-weight: 800; font-size: 1rem; color: var(--text); }
+    .btn-pay {
+      width: 100%; background: #4caf50; color: #fff;
+      padding: 15px; border: none; border-radius: 12px;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-pay:hover { background: #43a047; transform: translateY(-1px); }
+    .pay-note { text-align: center; font-size: 0.72rem; color: var(--muted2); margin-top: 12px; line-height: 1.5; }
+
+    @media (max-width: 780px) {
+      .sidebar { display: none; }
+      .builder-main { margin-left: 0; }
+      .step-nav { left: 0; padding: 14px 24px; }
+      .step-content { padding: 32px 24px 100px; }
+      .preview-modal-inner { flex-direction: column; }
+      .preview-right-panel { width: 100%; height: 280px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-field.span2 { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════ TOPBAR ══════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="landing-page.html" class="topbar-logo">Career<span>AI</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-title">CV Builder</span>
+    <div class="topbar-template-badge">
+      <span>🎨</span>
+      <span id="topbar-template-name">Modern Green</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="templates.html#resume" class="btn-ghost">← Change Template</a>
+    <button class="btn-ghost" onclick="openPreview()">👁 Preview</button>
+    <button class="btn-ghost" id="btn-save">💾 Save Draft</button>
+    <button class="btn-green" onclick="goNext()" id="btn-next">
+      Continue <span>→</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════ LAYOUT ══════ -->
+<div class="builder-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-section-label">Build Steps</div>
+
+      <div class="step-item active" id="si-1" onclick="jumpToStep(1)">
+        <div class="step-dot" id="sd-1">1</div>
+        <div class="step-info">
+          <div class="step-name">Personal Info</div>
+          <div class="step-sub">Name, contact, links</div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+
+      <div class="step-item" id="si-2" onclick="jumpToStep(2)">
+        <div class="step-dot" id="sd-2">2</div>
+        <div class="step-info">
+          <div class="step-name">Work Experience</div>
+          <div class="step-sub">Jobs & achievements</div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+
+      <div class="step-item" id="si-3" onclick="jumpToStep(3)">
+        <div class="step-dot" id="sd-3">3</div>
+        <div class="step-info">
+          <div class="step-name">Education</div>
+          <div class="step-sub">Degrees & courses</div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+
+      <div class="step-item" id="si-4" onclick="jumpToStep(4)">
+        <div class="step-dot" id="sd-4">4</div>
+        <div class="step-info">
+          <div class="step-name">Skills</div>
+          <div class="step-sub">Technical & soft skills</div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+
+      <div class="step-item" id="si-5" onclick="jumpToStep(5)">
+        <div class="step-dot" id="sd-5">5</div>
+        <div class="step-info">
+          <div class="step-name">Finalize & Preview</div>
+          <div class="step-sub">Review, ATS check</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="progress-bar-wrap">
+        <div class="progress-label">
+          <span>Progress</span>
+          <span id="progress-pct">20%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width:20%"></div>
+        </div>
+      </div>
+      <div class="sidebar-save-note">✓ Auto-saved 2 min ago</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="builder-main">
+
+    <!-- ── STEP 1: PERSONAL INFO ── -->
+    <div class="step-panel active" id="panel-1">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-header-label">Step 1 of 5</div>
+          <h2>Personal Information</h2>
+          <p>This is the header of your CV — make sure your details are accurate and professional.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="req">First Name</label>
+            <input type="text" id="f-fname" placeholder="e.g. Amina" oninput="updatePreview()"/>
+          </div>
+          <div class="form-field">
+            <label class="req">Last Name</label>
+            <input type="text" id="f-lname" placeholder="e.g. Mwangi" oninput="updatePreview()"/>
+          </div>
+          <div class="form-field span2">
+            <label class="req">Professional Title / Target Role</label>
+            <input type="text" id="f-role" placeholder="e.g. Senior Software Developer" oninput="updatePreview()"/>
+          </div>
+          <div class="form-field">
+            <label class="req">Email Address</label>
+            <input type="email" id="f-email" placeholder="your@email.com" oninput="updatePreview()"/>
+          </div>
+          <div class="form-field">
+            <label class="req">Phone Number</label>
+            <input type="tel" id="f-phone" placeholder="+254 7XX XXX XXX" oninput="updatePreview()"/>
+          </div>
+          <div class="form-field">
+            <label>City / Location</label>
+            <input type="text" id="f-location" placeholder="Nairobi, Kenya" oninput="updatePreview()"/>
+          </div>
+          <div class="form-field">
+            <label>LinkedIn URL</label>
+            <input type="text" id="f-linkedin" placeholder="linkedin.com/in/yourname"/>
+          </div>
+          <div class="form-field span2">
+            <label>Professional Summary <span style="color:var(--muted2);font-weight:400;text-transform:none;letter-spacing:0;">(or let AI write this)</span></label>
+            <textarea id="f-summary" rows="4" placeholder="A brief 2-3 sentence overview of who you are, your experience, and what you bring to the role..." oninput="updatePreview()"></textarea>
+          </div>
+        </div>
+        <div class="ai-bar">
+          <div>
+            <div class="ai-bar-title">✨ Let AI write your summary</div>
+            <div class="ai-bar-sub">Based on your role and experience, AI will generate a compelling professional summary.</div>
+          </div>
+          <button class="btn-ai" onclick="aiWriteSummary()">
+            <span class="spin" id="sum-spin"></span>
+            <span id="sum-btn-text">Generate Summary</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: EXPERIENCE ── -->
+    <div class="step-panel" id="panel-2">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-header-label">Step 2 of 5</div>
+          <h2>Work Experience</h2>
+          <p>Add your work history, most recent first. AI will enhance your bullet points with measurable impact.</p>
+        </div>
+        <div id="exp-entries">
+          <div class="entry-card">
+            <div class="entry-card-header">
+              <div class="entry-card-title"><span class="entry-card-num">1</span>Most Recent Position</div>
+              <button class="btn-remove" onclick="removeEntry(this)" title="Remove">✕</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-field span2">
+                <label class="req">Job Title</label>
+                <input type="text" placeholder="e.g. Software Developer" oninput="updatePreview()"/>
+              </div>
+              <div class="form-field">
+                <label class="req">Company / Organisation</label>
+                <input type="text" placeholder="e.g. Safaricom PLC" oninput="updatePreview()"/>
+              </div>
+              <div class="form-field">
+                <label>Location</label>
+                <input type="text" placeholder="Nairobi, Kenya"/>
+              </div>
+              <div class="form-field">
+                <label>Start Date</label>
+                <input type="text" placeholder="Jan 2022"/>
+              </div>
+              <div class="form-field">
+                <label>End Date</label>
+                <input type="text" placeholder="Present"/>
+              </div>
+              <div class="form-field span2">
+                <label>Key Responsibilities & Achievements</label>
+                <textarea placeholder="Describe what you did and the impact you made. AI will convert this into strong bullet points..." oninput="updatePreview()"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-add-entry" onclick="addExpEntry()">+ Add Another Position</button>
+        <div class="ai-bar" style="margin-top:28px;">
+          <div>
+            <div class="ai-bar-title">✨ Enhance bullet points with AI</div>
+            <div class="ai-bar-sub">AI rewrites your descriptions with action verbs and measurable achievements.</div>
+          </div>
+          <button class="btn-ai" onclick="aiEnhanceExp()">
+            <span class="spin" id="exp-spin"></span>
+            <span id="exp-btn-text">Enhance with AI</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: EDUCATION ── -->
+    <div class="step-panel" id="panel-3">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-header-label">Step 3 of 5</div>
+          <h2>Education</h2>
+          <p>Add your academic qualifications, degrees, and certifications.</p>
+        </div>
+        <div id="edu-entries">
+          <div class="entry-card">
+            <div class="entry-card-header">
+              <div class="entry-card-title"><span class="entry-card-num">1</span>Highest Qualification</div>
+              <button class="btn-remove" onclick="removeEntry(this)">✕</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-field span2">
+                <label class="req">Degree / Qualification</label>
+                <input type="text" placeholder="e.g. BSc Computer Science" oninput="updatePreview()"/>
+              </div>
+              <div class="form-field">
+                <label class="req">Institution</label>
+                <input type="text" placeholder="e.g. University of Nairobi" oninput="updatePreview()"/>
+              </div>
+              <div class="form-field">
+                <label>Year Completed</label>
+                <input type="text" placeholder="e.g. 2021"/>
+              </div>
+              <div class="form-field span2">
+                <label>Achievements / Relevant Modules</label>
+                <input type="text" placeholder="e.g. First Class Honours, Dean's List"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-add-entry" onclick="addEduEntry()">+ Add Another Qualification</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 4: SKILLS ── -->
+    <div class="step-panel" id="panel-4">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-header-label">Step 4 of 5</div>
+          <h2>Skills</h2>
+          <p>Add your technical and professional skills. Type a skill and press <strong>Enter</strong> to add it.</p>
+        </div>
+        <div class="form-grid cols-1">
+          <div class="form-field">
+            <label>Technical & Professional Skills</label>
+            <div class="skills-tags" id="skills-wrap" onclick="document.getElementById('skill-input').focus()">
+              <span class="skill-tag">JavaScript <button onclick="removeSkill(this)">×</button></span>
+              <span class="skill-tag">React <button onclick="removeSkill(this)">×</button></span>
+              <span class="skill-tag">Node.js <button onclick="removeSkill(this)">×</button></span>
+              <span class="skill-tag">Python <button onclick="removeSkill(this)">×</button></span>
+              <input id="skill-input" type="text" placeholder="Add skill and press Enter…" onkeydown="handleSkillKey(event)" style="min-width:140px;"/>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Languages</label>
+            <div class="skills-tags" id="lang-wrap" onclick="document.getElementById('lang-input').focus()">
+              <span class="skill-tag">English <button onclick="removeSkill(this)">×</button></span>
+              <span class="skill-tag">Swahili <button onclick="removeSkill(this)">×</button></span>
+              <input id="lang-input" type="text" placeholder="Add language…" onkeydown="handleLangKey(event)" style="min-width:120px;"/>
+            </div>
+          </div>
+        </div>
+        <div class="ai-bar" style="margin-top:28px;">
+          <div>
+            <div class="ai-bar-title">✨ Suggest skills for your role</div>
+            <div class="ai-bar-sub">AI recommends the most in-demand skills for your job title and industry.</div>
+          </div>
+          <button class="btn-ai" onclick="aiSuggestSkills()">
+            <span class="spin" id="skills-spin"></span>
+            <span id="skills-btn-text">Suggest Skills</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 5: FINALIZE ── -->
+    <div class="step-panel" id="panel-5">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-header-label">Step 5 of 5</div>
+          <h2>Finalize & Preview</h2>
+          <p>Review your CV, run an ATS check, then pay to download your completed document.</p>
+        </div>
+
+        <!-- ATS check -->
+        <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+            <div>
+              <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">ATS Score Analyzer</div>
+              <div style="font-size:0.82rem;color:var(--muted);font-weight:300;">Paste a job description to see how well your CV matches.</div>
+            </div>
+            <div id="ats-score-badge" style="display:none;background:var(--green-light);border:1px solid var(--green-mid);color:var(--green);font-weight:800;font-size:1.4rem;padding:8px 18px;border-radius:12px;">82</div>
+          </div>
+          <textarea id="jd-input" rows="5" placeholder="Paste the full job description here…" style="margin-bottom:12px;"></textarea>
+          <button class="btn-ai" style="width:100%;justify-content:center;" onclick="runATS()">
+            <span class="spin" id="ats-spin"></span>
+            <span id="ats-btn-text">⚡ Analyze ATS Score</span>
+          </button>
+          <div id="ats-results" style="display:none;margin-top:20px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:var(--green);">82</div>
+                <div style="font-size:0.72rem;color:var(--muted);">ATS Score</div>
+              </div>
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:var(--text);">74%</div>
+                <div style="font-size:0.72rem;color:var(--muted);">Keyword Match</div>
+              </div>
+            </div>
+            <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;">Missing Keywords</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <span style="background:#ffeaea;border:1px solid #ffcdd2;color:#c62828;font-size:0.73rem;padding:4px 11px;border-radius:5px;">Docker</span>
+              <span style="background:#ffeaea;border:1px solid #ffcdd2;color:#c62828;font-size:0.73rem;padding:4px 11px;border-radius:5px;">Agile/Scrum</span>
+              <span style="background:#ffeaea;border:1px solid #ffcdd2;color:#c62828;font-size:0.73rem;padding:4px 11px;border-radius:5px;">CI/CD</span>
+              <span style="background:var(--green-light);border:1px solid var(--green-mid);color:var(--green);font-size:0.73rem;padding:4px 11px;border-radius:5px;cursor:pointer;" onclick="alert('Adding missing keywords...')">+ Fix with AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CV preview card -->
+        <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="font-weight:700;font-size:0.92rem;">Your CV Preview</div>
+            <button class="btn-ghost" onclick="openPreview()">👁 Full Preview</button>
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:0.78rem;color:var(--muted);">
+            <div style="font-weight:700;font-size:0.9rem;color:var(--text);margin-bottom:2px;" id="fin-name">Amina Mwangi</div>
+            <div style="color:var(--green);font-size:0.8rem;margin-bottom:8px;" id="fin-role">Software Developer</div>
+            <div style="height:2px;background:var(--border);margin-bottom:10px;"></div>
+            <div style="color:var(--muted2);">5 sections complete · ATS optimized · Ready to download</div>
+          </div>
+        </div>
+
+        <!-- Download CTA -->
+        <div style="background:linear-gradient(135deg,var(--green-light),#f0fdf4);border:1.5px solid var(--green-mid);border-radius:16px;padding:28px;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:800;margin-bottom:6px;">Ready to download your CV? 🎉</div>
+          <div style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;font-weight:300;">Pay once via M-Pesa and get lifetime access — unlimited downloads, forever.</div>
+          <button class="btn-green" style="margin:0 auto;font-size:0.95rem;padding:14px 36px;" onclick="goToPayment()">
+            📲 Pay 100 Ksh via M-Pesa →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAYMENT PANEL ── -->
+    <div class="step-panel" id="panel-payment">
+      <div id="panel-payment" style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);padding:40px 24px;">
+        <div class="payment-card">
+          <div class="payment-top">
+            <div class="mpesa-logo">M-PESA</div>
+            <div class="mpesa-tagline">Lipa Na M-Pesa · Safaricom Daraja API</div>
+            <div class="pay-amount"><span class="ksh">Ksh </span>100</div>
+            <div class="pay-desc">CV Builder — Lifetime Access</div>
+          </div>
+          <div class="payment-body">
+            <div class="pay-field" style="margin-bottom:14px;">
+              <label>M-Pesa Phone Number</label>
+              <div class="phone-wrap">
+                <div class="phone-prefix">🇰🇪 +254</div>
+                <input type="tel" id="pay-phone" placeholder="712 345 678"/>
+              </div>
+            </div>
+            <div class="pay-summary">
+              <div class="pay-row"><span class="pk">CV Builder</span><span class="pv">Ksh 100</span></div>
+              <div class="pay-row"><span class="pk">ATS Analyzer</span><span class="pv green">Included</span></div>
+              <div class="pay-row"><span class="pk">Lifetime Downloads</span><span class="pv green">Included</span></div>
+              <div class="pay-row total"><span class="pk" style="font-weight:700;">Total</span><span class="pv">Ksh 100</span></div>
+            </div>
+            <button class="btn-pay" onclick="processPayment()">
+              <span>📲</span><span id="pay-btn-text">Pay Ksh 100 via M-Pesa</span>
+            </button>
+            <div class="pay-note">An STK Push will be sent to your Safaricom number. Enter your M-Pesa PIN to confirm.</div>
+            <div style="display:flex;justify-content:center;gap:18px;margin-top:14px;flex-wrap:wrap;">
+              <span style="font-size:0.7rem;color:var(--muted2);">🔒 Secured by Safaricom</span>
+              <span style="font-size:0.7rem;color:var(--muted2);">⚡ Instant access</span>
+              <span style="font-size:0.7rem;color:var(--muted2);">✅ No card needed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUCCESS PANEL ── -->
+    <div class="step-panel" id="panel-success">
+      <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);padding:40px 24px;">
+        <div class="success-card">
+          <div class="success-icon">🎉</div>
+          <div class="success-title">Payment Confirmed!</div>
+          <div class="success-sub">Your CV is permanently unlocked. Download it anytime, forever — no expiry.</div>
+          <div class="receipt-box">
+            <div class="receipt-label">M-Pesa Receipt</div>
+            <div class="receipt-row"><span class="rk">Receipt No.</span><span class="rv green" id="r-no">QHJ2K9X4T1</span></div>
+            <div class="receipt-row"><span class="rk">Amount</span><span class="rv">Ksh 100</span></div>
+            <div class="receipt-row"><span class="rk">Document</span><span class="rv">CV Builder</span></div>
+            <div class="receipt-row"><span class="rk">Access</span><span class="rv green">Lifetime ✓</span></div>
+            <div class="receipt-row"><span class="rk">Date</span><span class="rv" id="r-date"></span></div>
+          </div>
+          <div class="download-btns">
+            <a class="btn-dl pdf" href="#" onclick="alert('Downloading PDF...')">📄 Download PDF</a>
+            <a class="btn-dl" href="#" onclick="alert('Downloading DOCX...')">📝 Download DOCX</a>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn-ghost" onclick="openPreview()">👁 View CV</button>
+            <button class="btn-ghost" onclick="alert('Cover letter generator coming soon!')">✉️ Generate Cover Letter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════ STEP BOTTOM NAV ══════ -->
+<div class="step-nav" id="step-nav">
+  <div class="step-nav-left">
+    <button class="btn-ghost" onclick="goPrev()" id="btn-prev" style="display:none;">← Back</button>
+    <span class="step-indicator">Step <span id="step-cur">1</span> of <span>5</span></span>
+  </div>
+  <div class="step-nav-right">
+    <button class="btn-ghost" onclick="openPreview()">👁 Preview CV</button>
+    <button class="btn-green" onclick="goNext()" id="btn-next2">
+      Continue →
+    </button>
+  </div>
+</div>
+
+<!-- ══════ PREVIEW MODAL ══════ -->
+<div class="preview-modal" id="previewModal">
+  <div class="preview-modal-inner">
+
+    <!-- Left: CV paper -->
+    <div class="preview-left">
+      <div class="cv-paper theme-modern" id="cv-paper">
+        <div class="cv-header-block">
+          <div class="cv-name" id="pv-name">Your Name</div>
+          <div class="cv-role" id="pv-role">Your Role</div>
+          <div class="cv-contacts">
+            <span id="pv-email">📧 your@email.com</span>
+            <span id="pv-phone">📱 +254 7XX XXX XXX</span>
+            <span id="pv-location">📍 Nairobi, Kenya</span>
+          </div>
+        </div>
+        <div class="cv-body">
+          <div>
+            <div class="cv-section">
+              <div class="cv-section-title">Professional Summary</div>
+              <p class="cv-summary" id="pv-summary">Results-driven professional with proven experience delivering high-impact solutions. Strong analytical skills combined with excellent communication abilities. Passionate about contributing to team success and driving measurable outcomes.</p>
+            </div>
+            <div class="cv-section">
+              <div class="cv-section-title">Work Experience</div>
+              <div class="cv-entry" id="pv-exp">
+                <div class="cv-entry-title">Software Developer</div>
+                <div class="cv-entry-sub">Safaricom PLC · Nairobi · Jan 2022 – Present</div>
+                <ul>
+                  <li>Architected REST APIs serving 2M+ active users daily with 99.9% uptime.</li>
+                  <li>Led a team of 4 developers, delivering 3 major product releases on schedule.</li>
+                  <li>Reduced system latency by 40% through query optimization and caching.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="cv-section">
+              <div class="cv-section-title">Education</div>
+              <div class="cv-entry">
+                <div class="cv-entry-title">BSc Computer Science</div>
+                <div class="cv-entry-sub">University of Nairobi · 2021</div>
+              </div>
+            </div>
+            <div class="cv-section">
+              <div class="cv-section-title">Skills</div>
+              <div class="cv-skill-wrap" id="pv-skills">
+                <span class="cv-skill">JavaScript</span>
+                <span class="cv-skill">React</span>
+                <span class="cv-skill">Node.js</span>
+                <span class="cv-skill">Python</span>
+                <span class="cv-skill">PostgreSQL</span>
+              </div>
+            </div>
+            <div class="cv-section">
+              <div class="cv-section-title">Languages</div>
+              <div class="cv-entry">
+                <div class="cv-entry-title" style="font-size:0.78rem;font-weight:500;">English — Fluent</div>
+                <div class="cv-entry-title" style="font-size:0.78rem;font-weight:500;">Swahili — Native</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: actions + template switcher -->
+    <div class="preview-right-panel">
+      <div class="preview-right-header">
+        <h3>CV Preview</h3>
+        <button class="btn-close-preview" onclick="closePreview()">✕</button>
+      </div>
+
+      <div class="preview-actions">
+        <button class="preview-action-btn primary" onclick="closePreview();goToPayment()">
+          <span class="pa-icon">📲</span>
+          <div><div class="pa-label">Pay & Download</div><div class="pa-sub">100 Ksh — lifetime access</div></div>
+          <span class="pa-arrow">→</span>
+        </button>
+        <button class="preview-action-btn" onclick="closePreview()">
+          <span class="pa-icon">✏️</span>
+          <div><div class="pa-label" style="color:var(--text)">Continue Editing</div><div class="pa-sub">Go back and make changes</div></div>
+          <span class="pa-arrow" style="color:var(--muted2)">→</span>
+        </button>
+        <button class="preview-action-btn" onclick="closePreview();runAIGenerate()">
+          <span class="pa-icon">✨</span>
+          <div><div class="pa-label" style="color:var(--text)">Regenerate with AI</div><div class="pa-sub">Rewrite content with AI</div></div>
+          <span class="pa-arrow" style="color:var(--muted2)">→</span>
+        </button>
+      </div>
+
+      <div class="template-picker">
+        <div class="template-picker-title">Switch Template</div>
+        <div class="template-thumbs">
+          <div class="tpl-thumb-mini active" style="background:linear-gradient(135deg,#0d1f1a,#1a3d26);" onclick="setTheme('modern',this)" title="Modern Green"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#1565c0,#1976d2);" onclick="setTheme('classic',this)" title="Classic Blue"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#1a1a2e,#e91e63);" onclick="setTheme('executive',this)" title="Executive"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#333,#e65100);" onclick="setTheme('minimal',this)" title="Minimal"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#0d2137,#1565c0);" onclick="setTheme('navy',this)" title="Bold Navy"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#1b5e20,#4caf50);" onclick="setTheme('sage',this)" title="Soft Sage"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#ff6f00,#f50057);" onclick="setTheme('creative',this)" title="Creative"></div>
+          <div class="tpl-thumb-mini" style="background:linear-gradient(135deg,#333,#666);" onclick="setTheme('clean',this)" title="Simple Clean"></div>
+        </div>
+      </div>
+
+      <div style="padding:16px 24px;border-top:1px solid var(--border);margin-top:auto;">
+        <div style="font-size:0.72rem;color:var(--muted2);line-height:1.5;">💡 <strong>Tip:</strong> An ATS score above 75 significantly increases your chances of getting an interview.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ LOADING OVERLAY ══════ -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div style="text-align:center;">
+    <div class="loading-title" id="loading-title">Processing...</div>
+    <div class="loading-sub" id="loading-sub">Please wait</div>
+  </div>
+  <div class="loading-steps" id="loading-steps"></div>
+</div>
+
+<script>
+  // ─── TEMPLATE FROM URL ───
+  const urlParams = new URLSearchParams(window.location.search);
+  const templateMap = {
+    'modern-green': { theme: 'modern', name: 'Modern Green' },
+    'classic-blue':  { theme: 'classic', name: 'Classic Blue' },
+    'executive':     { theme: 'executive', name: 'Executive' },
+    'minimal':       { theme: 'minimal', name: 'Minimal' },
+    'bold-navy':     { theme: 'navy', name: 'Bold Navy' },
+    'soft-sage':     { theme: 'sage', name: 'Soft Sage' },
+    'creative':      { theme: 'creative', name: 'Creative Studio' },
+    'simple-clean':  { theme: 'clean', name: 'Simple Clean' },
+  };
+  const tplParam = urlParams.get('template') || 'modern-green';
+  const tplData  = templateMap[tplParam] || templateMap['modern-green'];
+
+  // Apply template on load
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(tplData.theme);
+    document.getElementById('topbar-template-name').textContent = tplData.name;
+    // highlight correct mini thumb
+    const idx = Object.keys(templateMap).indexOf(tplParam);
+    if (idx >= 0) {
+      document.querySelectorAll('.tpl-thumb-mini').forEach((t,i) => {
+        t.classList.toggle('active', i === idx);
+      });
+    }
+  });
+
+  function applyTheme(t) {
+    const paper = document.getElementById('cv-paper');
+    paper.className = 'cv-paper theme-' + t;
+  }
+
+  function setTheme(t, el) {
+    applyTheme(t);
+    document.querySelectorAll('.tpl-thumb-mini').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
+    const name = el.getAttribute('title');
+    document.getElementById('topbar-template-name').textContent = name;
+  }
+
+  // ─── STEP STATE ───
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  function updateSidebar() {
+    for (let i = 1; i <= totalSteps; i++) {
+      const si = document.getElementById('si-' + i);
+      const sd = document.getElementById('sd-' + i);
+      si.classList.remove('active', 'done');
+      sd.classList.remove('active', 'done');
+      if (i < currentStep) { si.classList.add('done'); sd.classList.add('done'); }
+      else if (i === currentStep) { si.classList.add('active'); }
+    }
+    // Progress
+    const pct = Math.round((currentStep / totalSteps) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    // Step indicator
+    document.getElementById('step-cur').textContent = currentStep;
+    // Prev button
+    document.getElementById('btn-prev').style.display = currentStep > 1 ? 'inline-flex' : 'none';
+    // Next button label
+    const nextBtn = document.getElementById('btn-next');
+    const nextBtn2 = document.getElementById('btn-next2');
+    const label = currentStep === totalSteps ? 'Pay & Download →' : 'Continue →';
+    if (nextBtn) nextBtn.innerHTML = label;
+    if (nextBtn2) nextBtn2.innerHTML = label;
+    // Hide step nav on payment/success
+    const nav = document.getElementById('step-nav');
+    if (nav) nav.style.display = ['payment','success'].includes(currentStep) ? 'none' : 'flex';
+  }
+
+  function showPanel(id) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function goNext() {
+    if (currentStep === totalSteps) { goToPayment(); return; }
+    currentStep++;
+    showPanel(currentStep);
+    updateSidebar();
+  }
+
+  function goPrev() {
+    if (currentStep <= 1) return;
+    currentStep--;
+    showPanel(currentStep);
+    updateSidebar();
+  }
+
+  function jumpToStep(n) {
+    currentStep = n;
+    showPanel(n);
+    updateSidebar();
+  }
+
+  function goToPayment() {
+    showPanel('payment');
+    const nav = document.getElementById('step-nav');
+    if (nav) nav.style.display = 'none';
+    // Update sidebar to all done
+    for (let i = 1; i <= totalSteps; i++) {
+      document.getElementById('si-' + i).classList.add('done');
+      document.getElementById('sd-' + i).classList.add('done');
+    }
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-pct').textContent = '100%';
+  }
+
+  // ─── LIVE PREVIEW UPDATE ───
+  function updatePreview() {
+    const fname = document.getElementById('f-fname')?.value || '';
+    const lname = document.getElementById('f-lname')?.value || '';
+    const role  = document.getElementById('f-role')?.value  || '';
+    const email = document.getElementById('f-email')?.value || '';
+    const phone = document.getElementById('f-phone')?.value || '';
+    const loc   = document.getElementById('f-location')?.value || '';
+    const summary = document.getElementById('f-summary')?.value || '';
+
+    const fullName = (fname + ' ' + lname).trim() || 'Your Name';
+    document.getElementById('pv-name').textContent = fullName;
+    document.getElementById('pv-role').textContent = role || 'Your Role';
+    document.getElementById('pv-email').textContent = '📧 ' + (email || 'your@email.com');
+    document.getElementById('pv-phone').textContent = '📱 ' + (phone || '+254 7XX XXX XXX');
+    document.getElementById('pv-location').textContent = '📍 ' + (loc || 'Nairobi, Kenya');
+    if (summary) document.getElementById('pv-summary').textContent = summary;
+
+    // Update finalize card
+    const fn = document.getElementById('fin-name');
+    const fr = document.getElementById('fin-role');
+    if (fn) fn.textContent = fullName;
+    if (fr) fr.textContent = role || 'Your Role';
+  }
+
+  // ─── PREVIEW MODAL ───
+  function openPreview() {
+    updatePreview();
+    document.getElementById('previewModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePreview() {
+    document.getElementById('previewModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('previewModal').addEventListener('click', function(e) {
+    if (e.target === this) closePreview();
+  });
+
+  // ─── SKILLS ───
+  function handleSkillKey(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const v = e.target.value.trim().replace(/,$/, '');
+      if (!v) return;
+      addTag(v, 'skills-wrap', 'skill-input');
+      updateSkillsPreview();
+    }
+  }
+  function handleLangKey(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const v = e.target.value.trim();
+      if (!v) return;
+      addTag(v, 'lang-wrap', 'lang-input');
+    }
+  }
+  function addTag(val, wrapId, inputId) {
+    const wrap = document.getElementById(wrapId);
+    const input = document.getElementById(inputId);
+    const tag = document.createElement('span');
+    tag.className = 'skill-tag';
+    tag.innerHTML = val + ' <button onclick="removeSkill(this)" type="button">×</button>';
+    wrap.insertBefore(tag, input);
+    input.value = '';
+  }
+  function removeSkill(btn) {
+    btn.closest('.skill-tag').remove();
+    updateSkillsPreview();
+  }
+  function updateSkillsPreview() {
+    const tags = document.querySelectorAll('#skills-wrap .skill-tag');
+    const pvSkills = document.getElementById('pv-skills');
+    pvSkills.innerHTML = '';
+    tags.forEach(t => {
+      const s = document.createElement('span');
+      s.className = 'cv-skill';
+      s.textContent = t.textContent.replace('×','').trim();
+      pvSkills.appendChild(s);
+    });
+  }
+
+  // ─── ADD ENTRIES ───
+  function removeEntry(btn) { btn.closest('.entry-card').remove(); }
+
+  function addExpEntry() {
+    const n = document.querySelectorAll('#exp-entries .entry-card').length + 1;
+    const d = document.createElement('div');
+    d.className = 'entry-card';
+    d.innerHTML = `
+      <div class="entry-card-header">
+        <div class="entry-card-title"><span class="entry-card-num">${n}</span>Previous Position</div>
+        <button class="btn-remove" onclick="removeEntry(this)">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-field span2"><label class="req">Job Title</label><input type="text" placeholder="e.g. Junior Developer" oninput="updatePreview()"/></div>
+        <div class="form-field"><label class="req">Company</label><input type="text" placeholder="Company name"/></div>
+        <div class="form-field"><label>Location</label><input type="text" placeholder="City, Kenya"/></div>
+        <div class="form-field"><label>Start Date</label><input type="text" placeholder="Jan 2020"/></div>
+        <div class="form-field"><label>End Date</label><input type="text" placeholder="Dec 2021"/></div>
+        <div class="form-field span2"><label>Responsibilities & Achievements</label><textarea placeholder="Describe your responsibilities and achievements..."></textarea></div>
+      </div>`;
+    document.getElementById('exp-entries').appendChild(d);
+  }
+
+  function addEduEntry() {
+    const d = document.createElement('div');
+    d.className = 'entry-card';
+    d.innerHTML = `
+      <div class="entry-card-header">
+        <div class="entry-card-title"><span class="entry-card-num">+</span>Additional Qualification</div>
+        <button class="btn-remove" onclick="removeEntry(this)">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-field span2"><label class="req">Degree / Certificate</label><input type="text" placeholder="e.g. Diploma in Project Management"/></div>
+        <div class="form-field"><label class="req">Institution</label><input type="text" placeholder="e.g. KCA University"/></div>
+        <div class="form-field"><label>Year</label><input type="text" placeholder="2020"/></div>
+        <div class="form-field span2"><label>Achievements</label><input type="text" placeholder="e.g. Distinction, Scholarship Award"/></div>
+      </div>`;
+    document.getElementById('edu-entries').appendChild(d);
+  }
+
+  // ─── AI HELPERS ───
+  function fakeAI(spinId, btnId, ms, callback) {
+    document.getElementById(spinId).style.display = 'block';
+    document.getElementById(btnId).textContent = 'Working…';
+    setTimeout(() => {
+      document.getElementById(spinId).style.display = 'none';
+      callback();
+    }, ms);
+  }
+
+  function aiWriteSummary() {
+    fakeAI('sum-spin', 'sum-btn-text', 1800, () => {
+      const role = document.getElementById('f-role').value || 'professional';
+      document.getElementById('f-summary').value = `Results-driven ${role} with 3+ years of experience building scalable, high-performance solutions. Proven track record of leading cross-functional teams and delivering impactful projects on time. Passionate about continuous improvement, clean code, and leveraging technology to solve real business problems.`;
+      document.getElementById('sum-btn-text').textContent = '✓ Generated!';
+      updatePreview();
+      setTimeout(() => document.getElementById('sum-btn-text').textContent = 'Regenerate', 2000);
+    });
+  }
+
+  function aiEnhanceExp() {
+    fakeAI('exp-spin', 'exp-btn-text', 2000, () => {
+      document.getElementById('exp-btn-text').textContent = '✓ Enhanced!';
+      setTimeout(() => document.getElementById('exp-btn-text').textContent = 'Enhance with AI', 2000);
+    });
+  }
+
+  function aiSuggestSkills() {
+    fakeAI('skills-spin', 'skills-btn-text', 1600, () => {
+      const role = document.getElementById('f-role')?.value?.toLowerCase() || '';
+      const suggestions = role.includes('design')
+        ? ['Figma','Adobe XD','Sketch','Illustrator','Prototyping']
+        : role.includes('data') || role.includes('analyst')
+        ? ['SQL','Power BI','Tableau','Excel','R','Machine Learning']
+        : ['Docker','Agile/Scrum','TypeScript','CI/CD','AWS','REST APIs'];
+      suggestions.forEach(s => addTag(s, 'skills-wrap', 'skill-input'));
+      updateSkillsPreview();
+      document.getElementById('skills-btn-text').textContent = '✓ Skills Added!';
+      setTimeout(() => document.getElementById('skills-btn-text').textContent = 'Suggest Skills', 2000);
+    });
+  }
+
+  function runATS() {
+    const jd = document.getElementById('jd-input').value;
+    if (!jd.trim()) { alert('Please paste a job description first.'); return; }
+    fakeAI('ats-spin', 'ats-btn-text', 2200, () => {
+      document.getElementById('ats-results').style.display = 'block';
+      document.getElementById('ats-score-badge').style.display = 'block';
+      document.getElementById('ats-btn-text').textContent = '✓ Analysis Complete';
+      setTimeout(() => document.getElementById('ats-btn-text').textContent = '⚡ Re-analyze', 2000);
+    });
+  }
+
+  function runAIGenerate() {
+    const overlay = document.getElementById('loadingOverlay');
+    const steps = [
+      'Analyzing your profile…',
+      'Writing professional summary…',
+      'Enhancing bullet points…',
+      'Running ATS optimization…',
+      'Finalizing your CV…'
+    ];
+    document.getElementById('loading-title').textContent = steps[0];
+    document.getElementById('loading-sub').textContent = 'AI is building your CV';
+    const stepsEl = document.getElementById('loading-steps');
+    stepsEl.innerHTML = steps.map((s,i) => `<div class="loading-step" id="ls-${i}"><div class="loading-step-dot"></div>${s}</div>`).join('');
+    document.getElementById('ls-0').classList.add('active');
+    overlay.classList.add('show');
+
+    let i = 0;
+    const iv = setInterval(() => {
+      if (i > 0) { document.getElementById('ls-'+(i-1))?.classList.replace('active','done'); }
+      if (i < steps.length) {
+        document.getElementById('ls-'+i)?.classList.add('active');
+        document.getElementById('loading-title').textContent = steps[i];
+        i++;
+      } else {
+        clearInterval(iv);
+        overlay.classList.remove('show');
+        openPreview();
+      }
+    }, 700);
+  }
+
+  // ─── PAYMENT ───
+  function processPayment() {
+    const btn = document.getElementById('pay-btn-text');
+    const steps = ['📲 STK Push Sent…','⏳ Waiting for M-Pesa PIN…','✅ Confirming payment…'];
+    let i = 0;
+    btn.textContent = steps[i++];
+    const iv = setInterval(() => {
+      if (i < steps.length) { btn.textContent = steps[i++]; }
+      else {
+        clearInterval(iv);
+        document.getElementById('r-no').textContent = 'Q' + Math.random().toString(36).substr(2,9).toUpperCase();
+        document.getElementById('r-date').textContent = new Date().toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'});
+        showPanel('success');
+        const nav = document.getElementById('step-nav');
+        if (nav) nav.style.display = 'none';
+      }
+    }, 1600);
+  }
+
+  // ─── KEYBOARD ───
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closePreview();
+  });
+
+  // ─── INIT ───
+  updateSidebar();
+</script>
+</body>
+</html>

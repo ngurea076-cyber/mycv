@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CareerAI Kenya — Build. Analyze. Get Hired.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green: #00a844;
+      --green-light: #e6f7ed;
+      --green-mid: #b2dfcc;
+      --green-bright: #00c853;
+      --green-glow: rgba(0,168,68,0.1);
+      --bg: #ffffff;
+      --bg2: #f7faf8;
+      --bg3: #f0f5f2;
+      --border: #e2ebe5;
+      --border2: #d0ddd5;
+      --text: #0f1f14;
+      --text2: #2d4535;
+      --muted: #637a6c;
+      --muted2: #96a89d;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════ NAV ══════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 68px;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    .nav-inner {
+      width: 90%; max-width: 1400px; margin: 0 auto;
+      height: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-weight: 800; font-size: 1.2rem;
+      color: var(--text); text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--green); }
+    .nav-center { display: flex; align-items: center; gap: 2px; }
+    .nav-link {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 8px 16px; border-radius: 8px;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .nav-link:hover { color: var(--text); background: var(--bg3); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .btn-nav-outline {
+      background: transparent; border: 1.5px solid var(--border2);
+      color: var(--text2); padding: 8px 20px; border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.83rem;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-nav-outline:hover { border-color: var(--green); color: var(--green); }
+    .btn-nav-cta {
+      background: var(--green); color: #fff;
+      padding: 9px 22px; border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.83rem;
+      text-decoration: none; transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(0,168,68,0.25);
+    }
+    .btn-nav-cta:hover { background: #009940; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,168,68,0.35); }
+
+    /* ══════════════ CONTAINER ══════════════ */
+    .container {
+      width: 90%; max-width: 1400px; margin: 0 auto;
+    }
+
+    /* ══════════════ HERO ══════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+      background: linear-gradient(160deg, #f0faf4 0%, #ffffff 50%, #f5fdf7 100%);
+    }
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, #c8e6c9 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.55;
+    }
+    .hero-glow {
+      position: absolute; width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,200,83,0.08) 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--green-light); border: 1px solid var(--green-mid);
+      color: var(--green); padding: 6px 18px; border-radius: 100px;
+      font-size: 0.78rem; font-weight: 600; margin-bottom: 28px;
+      letter-spacing: 0.02em; animation: fadeUp 0.5s ease both;
+    }
+    .badge-dot {
+      width: 6px; height: 6px; background: var(--green); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)} }
+    h1.hero-title {
+      position: relative;
+      font-size: clamp(2.4rem, 5.5vw, 4.8rem);
+      font-weight: 800; line-height: 1.08; letter-spacing: -0.035em;
+      max-width: 860px; margin-bottom: 22px;
+      color: var(--text);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    h1.hero-title .green { color: var(--green); }
+    h1.hero-title .dim { color: var(--muted); font-weight: 600; }
+    .hero-sub {
+      position: relative;
+      font-size: 1.05rem; color: var(--muted); max-width: 520px;
+      font-weight: 300; line-height: 1.78; margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-ctas {
+      position: relative;
+      display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 64px; animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--green); color: #fff;
+      padding: 15px 36px; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0,168,68,0.3);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #009940; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,168,68,0.4); }
+    .btn-outline {
+      background: #fff; color: var(--text2);
+      padding: 15px 36px; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem;
+      text-decoration: none; border: 1.5px solid var(--border2);
+      transition: all 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); }
+    .hero-stats {
+      position: relative;
+      display: flex; gap: 56px; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.75rem; font-weight: 800; color: var(--text); line-height: 1; }
+    .stat-num span { color: var(--green); }
+    .stat-label { font-size: 0.74rem; color: var(--muted); margin-top: 4px; font-weight: 400; }
+    .stat-divider { width: 1px; background: var(--border); align-self: stretch; margin: 4px 0; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)} }
+
+    /* ══════════════ SECTION SHARED ══════════════ */
+    section { padding: 96px 0; }
+    .section-label {
+      display: inline-block; color: var(--green); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.6rem);
+      font-weight: 800; letter-spacing: -0.025em; line-height: 1.18; margin-bottom: 12px;
+      color: var(--text);
+    }
+    .section-sub { color: var(--muted); font-size: 0.95rem; max-width: 480px; font-weight: 300; line-height: 1.75; }
+
+    /* ══════════════ TEMPLATES ══════════════ */
+    .templates-section { background: var(--bg2); padding: 96px 0; }
+    .templates-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 48px; flex-wrap: wrap; gap: 20px;
+    }
+    .btn-view-all {
+      display: flex; align-items: center; gap: 8px;
+      border: 1.5px solid var(--border2); color: var(--text2); background: #fff;
+      padding: 11px 22px; border-radius: 9px;
+      font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.83rem;
+      text-decoration: none; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .btn-view-all:hover { border-color: var(--green); color: var(--green); }
+    .templates-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
+    }
+    .template-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 16px; overflow: hidden; cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .template-card:hover {
+      border-color: var(--green); transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1), 0 0 0 1px var(--green);
+    }
+    .template-thumb {
+      height: 200px; position: relative; overflow: hidden;
+      display: flex; align-items: stretch;
+    }
+    .overlay-use {
+      position: absolute; inset: 0;
+      background: rgba(15,31,20,0.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .template-card:hover .overlay-use { opacity: 1; }
+    .overlay-btn {
+      background: var(--green); color: #fff;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.83rem;
+      padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer;
+      transform: translateY(8px); transition: transform 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .template-card:hover .overlay-btn { transform: translateY(0); }
+    .template-info { padding: 16px 18px; border-top: 1px solid var(--border); }
+    .template-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 3px; color: var(--text); }
+    .template-desc { font-size: 0.75rem; color: var(--muted); }
+    .template-badge {
+      display: inline-block;
+      background: var(--green-light); border: 1px solid var(--green-mid);
+      color: var(--green); font-size: 0.64rem; font-weight: 700;
+      padding: 2px 8px; border-radius: 4px; margin-left: 8px;
+      vertical-align: middle; letter-spacing: 0.04em;
+    }
+    .templates-cta { text-align: center; margin-top: 40px; }
+
+    /* ══════════════ FEATURES ══════════════ */
+    .features-section { background: #fff; padding: 96px 0; }
+    .features-header { text-align: center; margin-bottom: 52px; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feature-card {
+      background: var(--bg2); border: 1.5px solid var(--border);
+      border-radius: 18px; padding: 32px 28px; transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--green); transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,168,68,0.08);
+      background: #fff;
+    }
+    .feature-icon {
+      width: 52px; height: 52px; background: var(--green-light);
+      border: 1.5px solid var(--green-mid); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 20px;
+    }
+    .feature-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: var(--text); }
+    .feature-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.75; font-weight: 300; }
+    .feature-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 16px; font-size: 0.72rem; font-weight: 600; color: var(--green);
+    }
+
+    /* ══════════════ FAQ ══════════════ */
+    .faq-section { background: var(--bg2); padding: 96px 0; }
+    .faq-header { text-align: center; margin-bottom: 52px; }
+    .faq-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;
+    }
+    .faq-item {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 14px; overflow: hidden; transition: border-color 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .faq-item:hover { border-color: var(--green-mid); }
+    .faq-item.open { border-color: var(--green); }
+    .faq-question {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 22px; cursor: pointer; text-align: left; gap: 12px;
+    }
+    .faq-q-text {
+      font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.88rem; color: var(--text);
+    }
+    .faq-icon {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: var(--bg3); border: 1.5px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 1rem; transition: all 0.3s;
+    }
+    .faq-item.open .faq-icon {
+      background: var(--green-light); color: var(--green);
+      transform: rotate(45deg); border-color: var(--green-mid);
+    }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s;
+      font-size: 0.85rem; color: var(--muted); font-weight: 300; line-height: 1.8;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding: 0 22px 20px; }
+
+    /* ══════════════ FOOTER ══════════════ */
+    footer {
+      background: var(--text); color: #c8d9cc;
+      padding: 64px 0 0;
+    }
+    .footer-inner {
+      width: 90%; max-width: 1400px; margin: 0 auto;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px; padding-bottom: 52px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-brand-logo {
+      font-weight: 800; font-size: 1.2rem; color: #fff;
+      margin-bottom: 12px; letter-spacing: -0.02em;
+    }
+    .footer-brand-logo span { color: var(--green-bright); }
+    .footer-brand-desc {
+      color: #8aab92; font-size: 0.83rem; line-height: 1.75;
+      font-weight: 300; margin-bottom: 20px;
+    }
+    .footer-mpesa-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.25);
+      color: #66d98a; font-size: 0.72rem; font-weight: 600;
+      padding: 7px 14px; border-radius: 8px;
+    }
+    .footer-col-title {
+      font-weight: 700; font-size: 0.74rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #8aab92; margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a {
+      color: #adc4b4; text-decoration: none; font-size: 0.85rem;
+      font-weight: 400; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--green-bright); }
+    .footer-bottom {
+      padding: 22px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 0.78rem; color: #5c7a64; }
+    .footer-bottom-right { display: flex; gap: 20px; }
+    .footer-bottom-right a { font-size: 0.78rem; color: #5c7a64; text-decoration: none; transition: color 0.2s; }
+    .footer-bottom-right a:hover { color: #8aab92; }
+
+    /* ══════════════ REVEAL ══════════════ */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════ MOBILE ══════════════ */
+    @media (max-width: 960px) {
+      .nav-center { display: none; }
+      .templates-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .hero-stats { gap: 28px; }
+      .stat-divider { display: none; }
+    }
+    @media (max-width: 600px) {
+      .templates-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="landing-page.html" class="nav-logo">Career<span>AI</span></a>
+    <div class="nav-center">
+      <a href="templates.html#resume" class="nav-link">📄 Resume / CV</a>
+      <a href="templates.html#coverletter" class="nav-link">✉️ Cover Letter</a>
+      <a href="templates.html#portfolio" class="nav-link">🌐 Portfolio</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="btn-nav-cta">Get Started Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    AI-Powered · Built for Kenya · Pay via M-Pesa
+  </div>
+
+  <h1 class="hero-title">
+    Build a CV that <span class="green">gets you hired</span><br>
+    <span class="dim">in minutes, not days.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Professional CVs, cover letters and portfolios — generated by AI, analyzed for ATS, paid with M-Pesa in 30 seconds.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#" class="btn-primary">Build My CV — 100 Ksh</a>
+    <a href="#templates" class="btn-outline">Browse Templates →</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">100<span>Ksh</span></div>
+      <div class="stat-label">Full CV forever</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num"><span>~</span>3<span>min</span></div>
+      <div class="stat-label">Average build time</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">ATS<span>✓</span></div>
+      <div class="stat-label">Keyword optimized</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">M<span>-Pesa</span></div>
+      <div class="stat-label">Only payment needed</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ TEMPLATES ══════════════ -->
+<section class="templates-section" id="templates">
+  <div class="container">
+    <div class="templates-header">
+      <div>
+        <span class="section-label">Templates</span>
+        <h2 class="section-title">Professional designs<br>ready to use</h2>
+        <p class="section-sub">Every template is ATS-friendly, recruiter-approved, and fully customizable.</p>
+      </div>
+      <a href="#" class="btn-view-all">View All Templates →</a>
+    </div>
+
+    <div class="templates-grid">
+
+      <!-- Modern -->
+      <div class="template-card reveal">
+        <div class="template-thumb">
+          <div style="flex:1; background:#0d1f1a; padding:16px;">
+            <div style="height:44px; background:linear-gradient(135deg,#00a844,#00695c); border-radius:7px; margin-bottom:12px; display:flex; align-items:center; padding:0 12px; gap:9px;">
+              <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+              <div><div style="height:5px;width:62px;background:rgba(255,255,255,0.85);border-radius:2px;margin-bottom:4px;"></div><div style="height:3px;width:40px;background:rgba(255,255,255,0.4);border-radius:2px;"></div></div>
+            </div>
+            <div style="height:3px;width:44%;background:#00c853;border-radius:2px;margin-bottom:9px;opacity:.8;"></div>
+            <div style="height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:5px;"></div>
+            <div style="height:3px;width:82%;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:5px;"></div>
+            <div style="height:3px;width:58%;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:14px;"></div>
+            <div style="height:3px;width:38%;background:#00c853;border-radius:2px;margin-bottom:8px;opacity:.55;"></div>
+            <div style="height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:74%;background:rgba(255,255,255,0.08);border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:52%;background:rgba(255,255,255,0.08);border-radius:2px;"></div>
+          </div>
+        </div>
+        <div class="overlay-use"><button class="overlay-btn">Use Template</button></div>
+        <div class="template-info">
+          <div class="template-name">Modern <span class="template-badge">Popular</span></div>
+          <div class="template-desc">Clean dark design, great for tech roles</div>
+        </div>
+      </div>
+
+      <!-- Classic -->
+      <div class="template-card reveal">
+        <div class="template-thumb">
+          <div style="flex:1; background:#fff; padding:18px;">
+            <div style="border-bottom:3px solid #1565c0;padding-bottom:11px;margin-bottom:12px;">
+              <div style="height:7px;width:92px;background:#1565c0;border-radius:2px;margin-bottom:6px;"></div>
+              <div style="height:4px;width:62px;background:#1976d2;border-radius:2px;margin-bottom:8px;"></div>
+              <div style="display:flex;gap:8px;">
+                <div style="height:3px;width:46px;background:#bdbdbd;border-radius:2px;"></div>
+                <div style="height:3px;width:38px;background:#bdbdbd;border-radius:2px;"></div>
+              </div>
+            </div>
+            <div style="height:4px;width:52px;background:#1565c0;border-radius:2px;margin-bottom:8px;"></div>
+            <div style="height:3px;background:#e0e0e0;border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:84%;background:#e0e0e0;border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:62%;background:#e0e0e0;border-radius:2px;margin-bottom:14px;"></div>
+            <div style="height:4px;width:52px;background:#1565c0;border-radius:2px;margin-bottom:8px;"></div>
+            <div style="height:3px;background:#e0e0e0;border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:76%;background:#e0e0e0;border-radius:2px;"></div>
+          </div>
+        </div>
+        <div class="overlay-use"><button class="overlay-btn">Use Template</button></div>
+        <div class="template-info">
+          <div class="template-name">Classic</div>
+          <div class="template-desc">Traditional white layout, trusted by HR</div>
+        </div>
+      </div>
+
+      <!-- Executive -->
+      <div class="template-card reveal">
+        <div class="template-thumb">
+          <div style="display:flex;flex:1;height:100%;">
+            <div style="width:38%;background:#1a1a2e;padding:14px;display:flex;flex-direction:column;gap:6px;">
+              <div style="width:36px;height:36px;background:linear-gradient(135deg,#e91e63,#9c27b0);border-radius:50%;margin-bottom:6px;"></div>
+              <div style="height:4px;background:rgba(255,255,255,0.18);border-radius:2px;"></div>
+              <div style="height:3px;width:65%;background:rgba(255,255,255,0.1);border-radius:2px;"></div>
+              <div style="height:1px;background:rgba(255,255,255,0.12);margin:4px 0;"></div>
+              <div style="height:3px;width:50%;background:rgba(233,30,99,0.6);border-radius:2px;"></div>
+              <div style="height:3px;background:rgba(255,255,255,0.08);border-radius:2px;"></div>
+              <div style="height:3px;width:70%;background:rgba(255,255,255,0.08);border-radius:2px;"></div>
+            </div>
+            <div style="flex:1;background:#f8f9fa;padding:14px;">
+              <div style="height:3px;width:46px;background:#e91e63;border-radius:2px;margin-bottom:8px;"></div>
+              <div style="height:3px;background:#ddd;border-radius:2px;margin-bottom:4px;"></div>
+              <div style="height:3px;width:80%;background:#ddd;border-radius:2px;margin-bottom:4px;"></div>
+              <div style="height:3px;width:55%;background:#ddd;border-radius:2px;margin-bottom:12px;"></div>
+              <div style="height:3px;width:46px;background:#e91e63;border-radius:2px;margin-bottom:8px;"></div>
+              <div style="height:3px;background:#ddd;border-radius:2px;margin-bottom:4px;"></div>
+              <div style="height:3px;width:72%;background:#ddd;border-radius:2px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="overlay-use"><button class="overlay-btn">Use Template</button></div>
+        <div class="template-info">
+          <div class="template-name">Executive <span class="template-badge">New</span></div>
+          <div class="template-desc">Two-column bold layout for senior roles</div>
+        </div>
+      </div>
+
+      <!-- Minimal -->
+      <div class="template-card reveal">
+        <div class="template-thumb">
+          <div style="flex:1;background:#fafafa;padding:18px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <div style="flex:1;">
+                <div style="height:6px;width:82px;background:#212121;border-radius:2px;margin-bottom:5px;"></div>
+                <div style="height:3px;width:52px;background:#e65100;border-radius:2px;"></div>
+              </div>
+              <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#f57c00,#ff8f00);"></div>
+            </div>
+            <div style="height:1px;background:#e0e0e0;margin-bottom:12px;"></div>
+            <div style="height:3px;width:40px;background:#e65100;border-radius:2px;margin-bottom:8px;"></div>
+            <div style="height:3px;background:#eee;border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:78%;background:#eee;border-radius:2px;margin-bottom:4px;"></div>
+            <div style="height:3px;width:55%;background:#eee;border-radius:2px;margin-bottom:12px;"></div>
+            <div style="display:flex;gap:5px;">
+              <div style="height:16px;width:38px;background:#fff3e0;border-radius:4px;border:1px solid #ffe0b2;"></div>
+              <div style="height:16px;width:32px;background:#fff3e0;border-radius:4px;border:1px solid #ffe0b2;"></div>
+              <div style="height:16px;width:42px;background:#fff3e0;border-radius:4px;border:1px solid #ffe0b2;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="overlay-use"><button class="overlay-btn">Use Template</button></div>
+        <div class="template-info">
+          <div class="template-name">Minimal</div>
+          <div class="template-desc">Light, clean — perfect for any industry</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="templates-cta">
+      <a href="#" class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;">
+        Browse All 12 Templates &nbsp;→
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ FEATURES ══════════════ -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="features-header">
+      <span class="section-label">Features</span>
+      <h2 class="section-title" style="max-width:500px;margin:0 auto 12px;">Everything you need<br>to get hired faster</h2>
+      <p class="section-sub" style="margin:0 auto;">Built specifically for Kenyan job seekers — every feature has a purpose.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">✨</div>
+        <div class="feature-title">AI Create Mode</div>
+        <p class="feature-desc">Enter your job title, skills and experience — AI generates a complete, professional CV in seconds. No blank page, no guessing.</p>
+        <div class="feature-tag">⚡ ~2 minutes average</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">ATS Score Analyzer</div>
+        <p class="feature-desc">Know exactly why your CV is being rejected. Paste a job description and get a full ATS score with keyword gaps and AI-fix suggestions.</p>
+        <div class="feature-tag">🎯 0–100 point scoring</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📤</div>
+        <div class="feature-title">Upload & Improve</div>
+        <p class="feature-desc">Already have a CV? Upload your PDF or DOCX — AI restructures it, improves language, and optimizes it for ATS automatically.</p>
+        <div class="feature-tag">📁 PDF & DOCX supported</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">✉️</div>
+        <div class="feature-title">Cover Letter Generator</div>
+        <p class="feature-desc">Get a tailored cover letter for every job application — completely free. AI matches your skills to the job description every time.</p>
+        <div class="feature-tag">🆓 Always free</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-title">Portfolio Builder</div>
+        <p class="feature-desc">Showcase your work with a professional portfolio. AI generates your bio and project descriptions. Get a hosted link to share with employers.</p>
+        <div class="feature-tag">🔗 Shareable hosted link</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📲</div>
+        <div class="feature-title">M-Pesa Payments</div>
+        <p class="feature-desc">No credit cards, no bank accounts. Pay once via Safaricom M-Pesa STK Push in 30 seconds and own your document forever.</p>
+        <div class="feature-tag">🔒 Powered by Safaricom Daraja</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ FAQ ══════════════ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title" style="max-width:440px;margin:0 auto 12px;">Questions? We've got<br>answers.</h2>
+      <p class="section-sub" style="margin:0 auto;">Everything you need to know before you start building.</p>
+    </div>
+    <div class="faq-grid">
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">How does the AI CV builder work?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">You enter your job title, industry, key skills and experience level. Our AI generates a fully structured, professional CV with a summary, bullet-pointed achievements, and the right keywords for your target role. You can edit any section before downloading.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">Do I pay every time I download my CV?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">No — you pay once (100 Ksh for CV, 150 Ksh for Portfolio) and your document is permanently unlocked. Download as PDF or DOCX as many times as you want, forever. Edit and re-download at no extra charge.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">What is an ATS score and why does it matter?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">ATS stands for Applicant Tracking System — software most companies use to automatically filter CVs before a human reads them. If your CV doesn't contain the right keywords, it gets rejected automatically. Our analyzer scores your CV and tells you exactly what to add.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">Is M-Pesa the only payment method?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">Yes — we've built this platform specifically for Kenya and East Africa. M-Pesa is the most accessible, fastest and most secure way to pay for Kenyan users. No credit card or bank account required whatsoever.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">Can I upload my existing CV to improve it?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">Absolutely. Upload your existing CV in PDF or DOCX format and our AI will extract all your information, restructure it into a professional format, improve the language and bullet points, and optimize it for ATS — all automatically.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">Is the Cover Letter really free?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">Yes, completely free — always. Create a free account, enter the job description, and our AI generates a tailored cover letter. You can generate unlimited cover letters and download or save them all at no cost.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">What formats can I download my CV in?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">After payment you can download your CV as a PDF (best for applying online or emailing) or as a Word DOCX file (best if an employer asks for an editable version). Both are included in the one-time 100 Ksh payment.</div>
+      </div>
+
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <button class="faq-question"><span class="faq-q-text">Is my personal data safe?</span><span class="faq-icon">+</span></button>
+        <div class="faq-answer">Yes. Your CV data is stored securely and never sold to third parties. M-Pesa payments are processed directly through Safaricom's Daraja API — we never see or store your PIN. You can delete your account and all data at any time.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-logo">Career<span>AI</span> Kenya</div>
+        <p class="footer-brand-desc">Build. Analyze. Improve. Get Hired.<br>AI-powered career tools built for East Africa.<br>Pay via M-Pesa in 30 seconds.</p>
+        <div class="footer-mpesa-badge">📱 Payments via Safaricom M-Pesa</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Products</div>
+        <ul>
+          <li><a href="#">📄 Resume / CV Builder</a></li>
+          <li><a href="#">✉️ Cover Letter</a></li>
+          <li><a href="#">🌐 Portfolio Builder</a></li>
+          <li><a href="#">📊 ATS Analyzer</a></li>
+          <li><a href="#">🎨 Templates</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <ul>
+          <li><a href="#">CV Writing Tips</a></li>
+          <li><a href="#">ATS Guide</a></li>
+          <li><a href="#">Cover Letter Examples</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Career Advice</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 CareerAI Kenya. All rights reserved. Made with ❤️ in Kenya.</p>
+      <div class="footer-bottom-right">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function toggleFaq(item) {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 24px rgba(0,0,0,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
